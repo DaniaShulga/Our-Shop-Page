@@ -32,3 +32,21 @@
         font-weight: 700;
     }
 }
+
+.shop__block {
+    font-family: 'Open Sans', sans-serif;
+    .shop__items {
+        text-align: center;
+    }
+    .shop__products {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    .shop__products > *:not(:last-child) {
+        margin-right: 45px;
+    }
+    .shop__total {
+        text-align: center;
+    }
+}

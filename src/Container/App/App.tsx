@@ -1,10 +1,10 @@
-import Block from 'Components/ShopPage/ShopPage'
+import ShopPage from 'Components/ShopPage/ShopPage'
 
 type Props = {}
 const App = (props: Props) => {
     return (
         <>
-            <Block />
+            <ShopPage />
         </>
     )
 }

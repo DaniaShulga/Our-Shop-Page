@@ -1,76 +1,75 @@
-import productsArray, {
-    Currency,
-    Product,
-    currencies,
-} from 'utils/productsArray'
-import './ProductsList.scss'
 import { useState } from 'react'
+import productsArray, { Currency, Product, currency } from 'utils/productsArray'
+import './ProductsList.scss'
 
-type Props = {}
+const CurrencyConverter = () => {
+    const [products] = useState<Product[]>(productsArray)
 
-const ProductList = (props: Props) => {
+    const [currencies] = useState<Currency[]>(currency)
+
     const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
         currencies[1]
     )
-    const [total, setTotal] = useState<number>(calculateTotal())
 
-    function calculateTotal(): number {
-        return productsArray.reduce(
-            (total, product) => total + product.price,
-            0
-        )
-    }
+    const [cart, setCart] = useState<Product[]>([])
+    const [total, setTotal] = useState<number>(0)
 
-    function convertCurrency(price: number, rate: number): number {
+    const convertCurrency = (price: number, rate: number): number => {
         return Math.round(price * rate)
     }
 
-    function handleCurrencyChange(currency: Currency) {
+    const handleCurrencyChange = (currency: Currency) => {
         setSelectedCurrency(currency)
-        setTotal(calculateTotal() * currency.rate)
+        setTotal(
+            cart.reduce(
+                (total, product) =>
+                    total + convertCurrency(product.price, currency.rate),
+                0
+            )
+        )
     }
 
-    function handleBuy(product: Product) {
+    const handleBuyClick = (product: Product) => {
+        setCart([...cart, product])
         setTotal(total + convertCurrency(product.price, selectedCurrency.rate))
     }
 
     return (
-        <>
-            <div className="shop_page_block">
-                <h1>Our shop page</h1>
-                <div className="shop_page_btns">
-                    {currencies.map((label, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleCurrencyChange(label)}
-                        >
-                            {label.currency}
-                        </button>
-                    ))}
-                </div>
+        <div className="shop__block">
+            <div className="shop__items">
+                <h1 className="shop__title">Our shop page</h1>
+                {currencies.map((currency) => (
+                    <button
+                        key={currency.code}
+                        onClick={() => handleCurrencyChange(currency)}
+                        className="shop__buttons"
+                    >
+                        {currency.code}
+                    </button>
+                ))}
             </div>
-            <ul className="products">
-                {productsArray.map((product) => (
-                    <li key={product.id}>
-                        <h2>{product.title}</h2>
+            <div className="shop__products">
+                {products.map((product) => (
+                    <div key={product.id}>
+                        <h3>{product.title}</h3>
                         <p>{product.description}</p>
                         <p>
-                            {selectedCurrency.currency}{' '}
-                            <span className="price_span">
-                                {convertCurrency(
-                                    product.price,
-                                    selectedCurrency.rate
-                                )}
-                            </span>
+                            {selectedCurrency.code}{' '}
+                            {convertCurrency(
+                                product.price,
+                                selectedCurrency.rate
+                            )}
                         </p>
-                        <button onClick={() => handleBuy(product)}>Buy</button>
-                    </li>
+                        <button onClick={() => handleBuyClick(product)}>
+                            Buy
+                        </button>
+                    </div>
                 ))}
-            </ul>
-            <p className="products_total">
-                <span className="total_span">total :</span> {Math.round(total)}
-            </p>
-        </>
+            </div>
+
+            <p className="shop__total">total: {Math.round(total)}</p>
+        </div>
     )
 }
-export default ProductList
+
+export default CurrencyConverter

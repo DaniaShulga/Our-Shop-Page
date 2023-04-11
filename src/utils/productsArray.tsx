@@ -1,5 +1,5 @@
 export type Currency = {
-    currency: string
+    code: string
     rate: number
 }
 
@@ -10,10 +10,10 @@ export type Product = {
     price: number
 }
 
-export const currencies: Currency[] = [
-    { currency: 'USD', rate: 1.1 },
-    { currency: 'EUR', rate: 1 },
-    { currency: 'UAH', rate: 40 },
+export const currency: Currency[] = [
+    { code: 'USD', rate: 1.09 },
+    { code: 'EUR', rate: 1 },
+    { code: 'UAH', rate: 40 },
 ]
 
 export const productsArray: Product[] = [
